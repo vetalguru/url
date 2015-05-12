@@ -83,7 +83,7 @@ bool URL::parseUrl(const std::string& aUrl)
 
     // //<user>:<password>@<host>:<port>/<url-path>
     std::string userInfo;
-    parseuserInfo(ptr, userInfo, m_host, m_port);
+    parseAuthorityInfo(ptr, userInfo, m_host, m_port);
 
     if(!userInfo.empty())
     {
@@ -141,7 +141,7 @@ bool URL::parseScheme(char **ptr, std::string& aScheme)
     return true;
 }
 
-bool URL::parseuserInfo(char **ptr, std::string& aUserInfo, std::string& aHostInfo, unsigned& aPort)
+bool URL::parseAuthorityInfo(char **ptr, std::string& aUserInfo, std::string& aHostInfo, unsigned& aPort)
 {
     if(*((*ptr)++) == '/' && *((*ptr)++) == '/')
     {

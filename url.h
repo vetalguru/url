@@ -29,7 +29,7 @@ private:
 
     bool parseScheme(char **ptr, std::string& aScheme);
 
-    bool parseuserInfo(char **ptr, std::string& aUserInfo, std::string &aHostInfo, unsigned &aPort);
+    bool parseAuthorityInfo(char **ptr, std::string& aUserInfo, std::string &aHostInfo, unsigned &aPort);
 
     bool parseUserInfo(char **ptr, std::string& aUserInfo);
     bool parseHostInfo(char **ptr, std::string& aHostInfo);
