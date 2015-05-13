@@ -1,7 +1,7 @@
 #include "url.h"
 
-#include <iostream>
 #include <cctype>
+#include <stdio.h>
 #include <cstdlib>
 
 URL::URL()
@@ -75,8 +75,6 @@ bool URL::parseUrl(const std::string& aUrl)
 
     char *pptr = (char*)aUrl.c_str();
     char **ptr = &pptr;
-
-    // <scheme>:<scheme-specific-part>
 
     // option
     parseScheme(ptr, m_scheme);
@@ -607,6 +605,68 @@ std::string URL::fragment() const
 void URL::setFragment(const std::string& aFragment)
 {
     m_fragment = aFragment;
+}
+
+bool URL::setURL(const std::string& aUrl)
+{
+    return parseUrl(aUrl);
+}
+
+std::string URL::getURLString()
+{
+    std::string result;
+
+    if(!m_scheme.empty())
+    {
+        result += m_scheme;
+        result += "://";
+    }
+
+    if(!m_user.empty())
+    {
+        result += m_user;
+
+        if(!m_password.empty())
+        {
+            result += ':';
+            result += m_password;
+        }
+
+        result += '@';
+    }
+
+    if(!m_host.empty())
+    {
+        result += m_host;
+
+        if(m_port)
+        {
+            result += ':';
+            char buf[20];
+            sprintf(buf, "%d", m_port);
+            result += buf;
+        }
+    }
+
+    if(!m_path.empty())
+    {
+        result += '/';
+        result += m_path;
+    }
+
+    if(!m_query.empty())
+    {
+        result += '?';
+        result += m_query;
+    }
+
+    if(!m_fragment.empty())
+    {
+        result += '#';
+        result += m_fragment;
+    }
+
+    return result;
 }
 
 URL& URL::operator = (const URL& aURL)

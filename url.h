@@ -34,6 +34,9 @@ public:
     std::string fragment() const;
     void setFragment(const std::string& aFragment);
 
+    bool setURL(const std::string& aUrl);
+    std::string getURLString();
+
 
     URL& operator = (const URL& aURL);
     bool operator == (const URL& aURL);
