@@ -11,17 +11,31 @@ public:
     ~URL();
 
     std::string scheme() const;
+    void setScheme(const std::string& aScheme);
+
     std::string user() const;
+    void setUser(const std::string& aUser);
+
     std::string password() const;
+    void setPassword(const std::string& aPassword);
+
     std::string host() const;
-    unsigned    port() const;
+    void setHost(const std::string& aHost);
+
+    unsigned port() const;
+    void setPort(const unsigned aPort);
+
     std::string path() const;
+    void setPath(const std::string& aPath);
+
     std::string query() const;
+    void setQuery(const std::string& aQuery);
+
     std::string fragment() const;
+    void setFragment(const std::string& aFragment);
 
 
     URL& operator = (const URL& aURL);
-
     bool operator == (const URL& aURL);
 
 private:

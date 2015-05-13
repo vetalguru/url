@@ -534,9 +534,19 @@ std::string URL::scheme() const
     return m_scheme;
 }
 
+void URL::setScheme(const std::string& aScheme)
+{
+    m_scheme == aScheme;
+}
+
 std::string URL::user() const
 {
     return m_user;
+}
+
+void URL::setUser(const std::string& aUser)
+{
+    m_user = aUser;
 }
 
 std::string URL::password() const
@@ -544,9 +554,19 @@ std::string URL::password() const
     return m_password;
 }
 
+void URL::setPassword(const std::string& aPassword)
+{
+    m_password = aPassword;
+}
+
 std::string URL::host() const
 {
     return m_host;
+}
+
+void URL::setHost(const std::string& aHost)
+{
+    m_host = aHost;
 }
 
 unsigned URL::port() const
@@ -554,9 +574,19 @@ unsigned URL::port() const
     return m_port;
 }
 
+void URL::setPort(const unsigned aPort)
+{
+    m_port = aPort;
+}
+
 std::string URL::path() const
 {
     return m_path;
+}
+
+void URL::setPath(const std::string& aPath)
+{
+    m_path = aPath;
 }
 
 std::string URL::query() const
@@ -564,9 +594,19 @@ std::string URL::query() const
     return m_query;
 }
 
+void URL::setQuery(const std::string& aQuery)
+{
+    m_query = aQuery;
+}
+
 std::string URL::fragment() const
 {
     return m_fragment;
+}
+
+void URL::setFragment(const std::string& aFragment)
+{
+    m_fragment = aFragment;
 }
 
 URL& URL::operator = (const URL& aURL)
