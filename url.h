@@ -7,7 +7,7 @@ class URL
 {
 public:
     URL();
-    URL(const std::string& aUrl);
+    URL(const std::string &aUrl);
     ~URL();
 
     std::string scheme() const;
@@ -18,6 +18,9 @@ public:
     std::string path() const;
     std::string query() const;
     std::string fragment() const;
+
+
+    URL& operator = (const URL& aURL);
 
 private:
     bool parseUrl(const std::string& aUrl);

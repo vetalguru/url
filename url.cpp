@@ -9,7 +9,7 @@ URL::URL()
 {
 }
 
-URL::URL(const std::string& aUrl)
+URL::URL(const std::string &aUrl)
     : m_port(0)
 {
     parseUrl(aUrl);
@@ -567,6 +567,20 @@ std::string URL::query() const
 std::string URL::fragment() const
 {
     return m_fragment;
+}
+
+URL& URL::operator = (const URL& aURL)
+{
+    m_scheme   = aURL.scheme();
+    m_user     = aURL.user();
+    m_password = aURL.password();
+    m_host     = aURL.host();
+    m_port     = aURL.port();
+    m_path     = aURL.path();
+    m_query    = aURL.query();
+    m_fragment = aURL.fragment();
+
+    return *this;
 }
 
 
