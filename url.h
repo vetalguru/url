@@ -22,6 +22,8 @@ public:
 
     URL& operator = (const URL& aURL);
 
+    bool operator == (const URL& aURL);
+
 private:
     bool parseUrl(const std::string& aUrl);
 

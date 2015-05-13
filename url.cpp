@@ -583,4 +583,18 @@ URL& URL::operator = (const URL& aURL)
     return *this;
 }
 
+bool URL::operator == (const URL& aURL)
+{
+    if( m_scheme   == aURL.scheme()   &&
+        m_user     == aURL.user()     &&
+        m_password == aURL.password() &&
+        m_host     == aURL.host()     &&
+        m_port     == aURL.port()     &&
+        m_path     == aURL.path()     &&
+        m_query    == aURL.query()    &&
+        m_fragment == aURL.fragment())
+        return true;
+
+    return false;
+}
 
