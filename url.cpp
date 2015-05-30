@@ -3,6 +3,7 @@
 #include <cctype>
 #include <stdio.h>
 #include <cstdlib>
+#include <algorithm>
 
 URL::URL()
     : m_port(0)
@@ -12,7 +13,10 @@ URL::URL()
 URL::URL(const std::wstring &aUrl)
     : m_port(0)
 {
-    parseUrl(aUrl);
+    std::wstring url = aUrl;
+    toLower(url);
+
+    parseUrl(url);
 }
 
 URL::~URL()
@@ -498,6 +502,52 @@ bool URL::parseOctet(wchar_t **ptr, std::wstring& aOct)
 
     return true;
 }
+
+bool URL::parseEncoded(wchar_t **ptr, std::wstring& aEncoded)
+{
+    aEncoded.clear();
+    aEncoded.resize(4);
+
+    wchar_t *ptrBackup= *ptr;
+
+    wchar_t ch = **ptr;
+    if(ch != L'%')
+        return false;
+
+    (*ptr)++;
+
+    wchar_t ch1 = **ptr;
+    if(isHexDigit(ch))
+    {
+        aEncoded.clear();
+        return false;
+    }
+
+    (*ptr)++;
+
+    wchar_t ch2 = **ptr;
+    if(isHexDigit(ch))
+    {
+        aEncoded.clear();
+        return false;
+    }
+
+    aEncoded  = L'%';
+    aEncoded += ch1;
+    aEncoded += ch2;
+    aEncoded += L'\0';
+
+    return false;
+}
+
+void URL::toLower(std::wstring& aString)
+{
+    if(aString.empty())
+        return;
+
+    std::transform(aString.begin(), aString.end(), aString.begin(), tolower);
+}
+
 
 bool URL::parsePortInfo(wchar_t **ptr, unsigned& aPort)
 {

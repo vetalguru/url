@@ -71,6 +71,9 @@ private:
 
     bool parseH16(wchar_t **ptr, std::wstring& aH16);
     bool parseOctet(wchar_t **ptr, std::wstring& aOct);
+    bool parseEncoded(wchar_t **ptr, std::wstring& aEncoded);
+
+    void toLower(std::wstring &aString);
 
 private:
     std::wstring m_scheme;
