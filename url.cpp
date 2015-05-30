@@ -9,7 +9,7 @@ URL::URL()
 {
 }
 
-URL::URL(const std::string &aUrl)
+URL::URL(const std::wstring &aUrl)
     : m_port(0)
 {
     parseUrl(aUrl);
@@ -19,39 +19,39 @@ URL::~URL()
 {
 }
 
-bool URL::isNonReserved(const char aSymbol)
+bool URL::isNonReserved(const wchar_t aSymbol)
 {
     if(isalpha(aSymbol) || isdigit(aSymbol))
         return true;
 
     switch(aSymbol)
     {
-        case '-': case '.': case '_' : case '~':
+        case L'-': case L'.': case L'_' : case L'~':
         return true;
     }
 
     return false;
 }
 
-bool URL::isDelims(const char aSymbol)
+bool URL::isDelims(const wchar_t aSymbol)
 {
     switch(aSymbol)
     {
-        case ':': case '/': case '?': case '#':
-        case '[': case ']': case '@':
+        case L':': case L'/': case L'?': case L'#':
+        case L'[': case L']': case L'@':
             return true;
     }
 
     return false;
 }
 
-bool URL::isSubDelims(const char aSymbol)
+bool URL::isSubDelims(const wchar_t aSymbol)
 {
     switch(aSymbol)
     {
-        case '!': case '$': case '&': case '\\':
-        case '(': case ')': case '*': case '+':
-        case ',': case ';': case '=':
+        case L'!': case L'$': case L'&': case L'\\':
+        case L'(': case L')': case L'*': case L'+':
+        case L',': case L';': case L'=':
             {
                 return true;
             }
@@ -60,27 +60,27 @@ bool URL::isSubDelims(const char aSymbol)
     return false;
 }
 
-bool URL::isHexDigit(const char aDigit)
+bool URL::isHexDigit(const wchar_t aDigit)
 {
-    if(isdigit(aDigit) || (aDigit >= 'a' && aDigit <= 'f') || (aDigit >= 'A' && aDigit <= 'F'))
+    if(isdigit(aDigit) || (aDigit >= L'a' && aDigit <= L'f') || (aDigit >= L'A' && aDigit <= L'F'))
         return true;
 
     return false;
 }
 
-bool URL::parseUrl(const std::string& aUrl)
+bool URL::parseUrl(const std::wstring& aUrl)
 {
     if(aUrl.empty())
         return false;
 
-    char *pptr = (char*)aUrl.c_str();
-    char **ptr = &pptr;
+    wchar_t *pptr = (wchar_t*)aUrl.c_str();
+    wchar_t **ptr = &pptr;
 
     // option
     parseScheme(ptr, m_scheme);
 
     // //<user>:<password>@<host>:<port>/<url-path>
-    std::string userInfo;
+    std::wstring userInfo;
     parseAuthorityInfo(ptr, userInfo, m_host, m_port);
 
     if(!userInfo.empty())
@@ -110,16 +110,16 @@ bool URL::parseUrl(const std::string& aUrl)
     return true;
 }
 
-bool URL::parseScheme(char **ptr, std::string& aScheme)
+bool URL::parseScheme(wchar_t **ptr, std::wstring& aScheme)
 {
-    char *ptrBackup = *ptr;
+    wchar_t *ptrBackup = *ptr;
     bool first = true;
-    for (;;)
+    for(;;)
     {
-        char ch = **ptr;
+        wchar_t ch = **ptr;
         if (isalpha(ch))
             aScheme += ch;
-        else if (!first && (isdigit(ch) || ch == '+' || ch == '-' || ch == '.'))
+        else if (!first && (isdigit(ch) || ch == L'+' || ch == L'-' || ch == L'.'))
             aScheme += ch;
         else
             break;
@@ -128,8 +128,8 @@ bool URL::parseScheme(char **ptr, std::string& aScheme)
         first = false;
     }
 
-    char ch = *((*ptr)++);
-    if(ch != ':')
+    wchar_t ch = *((*ptr)++);
+    if(ch != L':')
     {
         *ptr = ptrBackup;
         aScheme.clear();
@@ -139,15 +139,15 @@ bool URL::parseScheme(char **ptr, std::string& aScheme)
     return true;
 }
 
-bool URL::parseAuthorityInfo(char **ptr, std::string& aUserInfo, std::string& aHostInfo, unsigned& aPort)
+bool URL::parseAuthorityInfo(wchar_t **ptr, std::wstring& aUserInfo, std::wstring& aHostInfo, unsigned& aPort)
 {
-    if(*((*ptr)++) == '/' && *((*ptr)++) == '/')
+    if(*((*ptr)++) == L'/' && *((*ptr)++) == L'/')
     {
-        char *ptrBackup = *ptr;
+        wchar_t *ptrBackup = *ptr;
 
         if(parseUserInfo(ptr, aUserInfo))
         {
-            if(*((*ptr)++) != '@')
+            if(*((*ptr)++) != L'@')
             {
                 *ptr = ptrBackup;
                 aUserInfo.clear();
@@ -160,8 +160,8 @@ bool URL::parseAuthorityInfo(char **ptr, std::string& aUserInfo, std::string& aH
             return false;
         }
 
-        char *ptrBackup2 = *ptr;
-        if(*((*ptr)++) != ':')
+        wchar_t *ptrBackup2 = *ptr;
+        if(*((*ptr)++) != L':')
         {
             *ptr = ptrBackup2;
             return true;
@@ -177,12 +177,12 @@ bool URL::parseAuthorityInfo(char **ptr, std::string& aUserInfo, std::string& aH
     return true;
 }
 
-bool URL::parseUserInfo(char **ptr, std::string& aUserInfo)
+bool URL::parseUserInfo(wchar_t **ptr, std::wstring& aUserInfo)
 {
     for(;;)
     {
-        char ch = **ptr;
-        if(isalpha(ch) || isdigit(ch) || ch == '-' || ch == '.' || ch == '_' || ch == '~' || isSubDelims(ch) || ch == ':')
+        wchar_t ch = **ptr;
+        if(isalpha(ch) || isdigit(ch) || ch == L'-' || ch == L'.' || ch == L'_' || ch == L'~' || isSubDelims(ch) || ch == L':')
         {
             aUserInfo += ch;
             (*ptr)++;
@@ -194,11 +194,11 @@ bool URL::parseUserInfo(char **ptr, std::string& aUserInfo)
     return true;
 }
 
-bool URL::parseHostInfo(char **ptr, std::string& aHostInfo)
+bool URL::parseHostInfo(wchar_t **ptr, std::wstring& aHostInfo)
 {
     aHostInfo.clear();
 
-    char *ptrBackup = *ptr;
+    wchar_t *ptrBackup = *ptr;
     if(!parseIPv6Address(ptr, aHostInfo))
     {
         *ptr = ptrBackup;
@@ -214,13 +214,13 @@ bool URL::parseHostInfo(char **ptr, std::string& aHostInfo)
     return true;
 }
 
-bool URL::parseDomainName(char **ptr, std::string& aAddress)
+bool URL::parseDomainName(wchar_t **ptr, std::wstring& aAddress)
 {
     aAddress.clear();
 
     for(;;)
     {
-        char ch = **ptr;
+        wchar_t ch = **ptr;
         if(!isNonReserved(ch) && !isSubDelims(ch))
         {
             break;
@@ -235,12 +235,12 @@ bool URL::parseDomainName(char **ptr, std::string& aAddress)
     return true;
 }
 
-bool URL::parseIPv4Address(char **ptr, std::string& aAddress)
+bool URL::parseIPv4Address(wchar_t **ptr, std::wstring& aAddress)
 {
     aAddress.clear();
 
-    char *ptrBackup = *ptr;
-    std::string tmp;
+    wchar_t *ptrBackup = *ptr;
+    std::wstring tmp;
     tmp.resize(32);
 
     bool res = parseOctet(ptr, tmp);
@@ -252,16 +252,16 @@ bool URL::parseIPv4Address(char **ptr, std::string& aAddress)
 
     for(int i = 0; i < 3; i++)
     {
-        char ch = *((*ptr)++);
-        if(ch != '.')
+        wchar_t ch = *((*ptr)++);
+        if(ch != L'.')
         {
             *ptr = ptrBackup;
             return false;
         }
 
-        tmp += '.';
+        tmp += L'.';
 
-        std::string tmp1;
+        std::wstring tmp1;
         res = parseOctet(ptr, tmp1);
         if(!res)
         {
@@ -277,22 +277,22 @@ bool URL::parseIPv4Address(char **ptr, std::string& aAddress)
     return true;
 }
 
-bool URL::parseIPv6Address(char **ptr, std::string& aAddress)
+bool URL::parseIPv6Address(wchar_t **ptr, std::wstring& aAddress)
 {
     aAddress.clear();
 
-    char *ptrBackup = *ptr;
+    wchar_t *ptrBackup = *ptr;
 
-    char ch = **ptr;
-    if(ch == '[')
+    wchar_t ch = **ptr;
+    if(ch == L'[')
     {
-        aAddress += '[';
+        aAddress += L'[';
         (*ptr)++;
     }
     else
         return false;
 
-    std::string tmp;
+    std::wstring tmp;
 
     int leftHexColons = 0;
 
@@ -303,14 +303,14 @@ bool URL::parseIPv6Address(char **ptr, std::string& aAddress)
 
         if(leftHexColons != 7)
         {
-            char ch = **ptr;
-            if(ch != ':')
+            wchar_t ch = **ptr;
+            if(ch != L':')
             {
                 *ptr = ptrBackup;
                 return false;
             }
 
-            tmp += ':';
+            tmp += L':';
             (*ptr)++;
         }
 
@@ -319,36 +319,36 @@ bool URL::parseIPv6Address(char **ptr, std::string& aAddress)
     }
 
     ch = **ptr;
-    if(ch != ']')
+    if(ch != L']')
     {
         *ptr = ptrBackup;
         return false;
     }
 
-    aAddress += ']';
+    aAddress += L']';
     (*ptr)++;
 
     return true;
 }
 
-bool URL::parsePath(char **ptr, std::string& aPath)
+bool URL::parsePath(wchar_t **ptr, std::wstring& aPath)
 {
     aPath.clear();
 
-    char *ptrBackup = *ptr;
-    if(*((*ptr)++) != '/')
+    wchar_t *ptrBackup = *ptr;
+    if(*((*ptr)++) != L'/')
     {
         *ptr = ptrBackup;
         return false;
     }
 
-    aPath += '/';
+    aPath += L'/';
 
     while(true)
     {
-        char ch = **ptr;
+        wchar_t ch = **ptr;
         if(isdigit(ch) || isalpha(ch) || isNonReserved(ch) || isSubDelims(ch)
-            || ch == ':' || ch == '@' || ch == '/')
+            || ch == L':' || ch == L'@' || ch == L'/')
         {
             aPath += ch;
             (*ptr)++;
@@ -366,12 +366,12 @@ bool URL::parsePath(char **ptr, std::string& aPath)
     return true;
 }
 
-bool URL::parseQuery(char **ptr, std::string& aQuery)
+bool URL::parseQuery(wchar_t **ptr, std::wstring& aQuery)
 {
     aQuery.clear();
 
-    char ch = **ptr;
-    if(ch != '?')
+    wchar_t ch = **ptr;
+    if(ch != L'?')
         return false;
 
     (*ptr)++;
@@ -381,15 +381,15 @@ bool URL::parseQuery(char **ptr, std::string& aQuery)
         ch  = *((*ptr)++);
 
         if(isdigit(ch) || isalpha(ch) || isNonReserved(ch) || isSubDelims(ch)
-            || ch == ':' || ch == '@' || ch == '/')
+            || ch == L':' || ch == L'@' || ch == L'/')
         {
             aQuery += ch;
         }
         else
         {
-            char *ptrBackup = *ptr;
+            wchar_t *ptrBackup = *ptr;
 
-            if(ch == '/' || ch == '?')
+            if(ch == L'/' || ch == L'?')
                 aQuery += ch;
             else
             {
@@ -405,29 +405,29 @@ bool URL::parseQuery(char **ptr, std::string& aQuery)
     return true;
 }
 
-bool URL::parseFragment(char **ptr, std::string& aFragment)
+bool URL::parseFragment(wchar_t **ptr, std::wstring& aFragment)
 {
     aFragment.clear();
 
-    char ch = **ptr;
-    if(ch != '#')
+    wchar_t ch = **ptr;
+    if(ch != L'#')
         return false;
 
     (*ptr)++;
 
     for(;;)
     {
-        char *ptrBackup = *ptr;
+        wchar_t *ptrBackup = *ptr;
         ch = *((*ptr)++);
 
         if(isdigit(ch) || isalpha(ch) || isNonReserved(ch) || isSubDelims(ch)
-            || ch == ':' || ch == '@' || ch =='/')
+            || ch == L':' || ch == L'@' || ch == L'/')
         {
             aFragment += ch;
         }
         else
         {
-            if(ch == '/' || ch == '?' || ch == '#')
+            if(ch == L'/' || ch == L'?' || ch == L'#')
                 aFragment += ch;
             else
             {
@@ -443,11 +443,11 @@ bool URL::parseFragment(char **ptr, std::string& aFragment)
     return true;
 }
 
-bool URL::parseH16(char **ptr, std::string& aH16)
+bool URL::parseH16(wchar_t **ptr, std::wstring& aH16)
 {
     aH16.clear();
 
-    char ch = **ptr;
+    wchar_t ch = **ptr;
     if(!isHexDigit(ch))
         return false;
 
@@ -457,7 +457,7 @@ bool URL::parseH16(char **ptr, std::string& aH16)
 
     for(int i = 0; i < 3; i++)
     {
-        char ch = **ptr;
+        wchar_t ch = **ptr;
         if(!isHexDigit(ch))
             break;
 
@@ -471,16 +471,16 @@ bool URL::parseH16(char **ptr, std::string& aH16)
     return true;
 }
 
-bool URL::parseOctet(char **ptr, std::string& aOct)
+bool URL::parseOctet(wchar_t **ptr, std::wstring& aOct)
 {
     aOct.clear();
 
     for(int i = 0; i < 3; i++)
     {
-        char ch = **ptr;
+        wchar_t ch = **ptr;
         if(!isdigit(ch))
         {
-            if(ch == '.' && atoi(aOct.c_str()) < 255)
+            if(ch == L'.' && atoi(std::string(aOct.begin(), aOct.end()).c_str()) < 255)
                 return true;
 
             return false;
@@ -489,25 +489,25 @@ bool URL::parseOctet(char **ptr, std::string& aOct)
         aOct += ch;
         (*ptr)++;
 
-        if(i == 0 && ch == '0')
+        if(i == 0 && ch == L'0')
             return true;
     }
 
-    if(atoi(aOct.c_str()) > 255)
+    if(atoi(std::string(aOct.begin(), aOct.end()).c_str()) > 255)
         return false;
 
     return true;
 }
 
-bool URL::parsePortInfo(char **ptr, unsigned& aPort)
+bool URL::parsePortInfo(wchar_t **ptr, unsigned& aPort)
 {
     aPort = 0;
-    std::string num;
+    std::wstring num;
 
     for(;;)
     {
-        char *ptrBackup = *ptr;
-        char ch = *((*ptr)++);
+        wchar_t *ptrBackup = *ptr;
+        wchar_t ch = *((*ptr)++);
 
         if(!isdigit(ch))
         {
@@ -521,48 +521,48 @@ bool URL::parsePortInfo(char **ptr, unsigned& aPort)
     if(num.empty())
         return false;
 
-    aPort = atoi(num.c_str());
+    aPort = atoi(std::string(num.begin(), num.end()).c_str());
 
     return true;
 }
 
 
-std::string URL::scheme() const
+std::wstring URL::scheme() const
 {
     return m_scheme;
 }
 
-void URL::setScheme(const std::string& aScheme)
+void URL::setScheme(const std::wstring& aScheme)
 {
     m_scheme == aScheme;
 }
 
-std::string URL::user() const
+std::wstring URL::user() const
 {
     return m_user;
 }
 
-void URL::setUser(const std::string& aUser)
+void URL::setUser(const std::wstring& aUser)
 {
     m_user = aUser;
 }
 
-std::string URL::password() const
+std::wstring URL::password() const
 {
     return m_password;
 }
 
-void URL::setPassword(const std::string& aPassword)
+void URL::setPassword(const std::wstring& aPassword)
 {
     m_password = aPassword;
 }
 
-std::string URL::host() const
+std::wstring URL::host() const
 {
     return m_host;
 }
 
-void URL::setHost(const std::string& aHost)
+void URL::setHost(const std::wstring& aHost)
 {
     m_host = aHost;
 }
@@ -577,49 +577,49 @@ void URL::setPort(const unsigned aPort)
     m_port = aPort;
 }
 
-std::string URL::path() const
+std::wstring URL::path() const
 {
     return m_path;
 }
 
-void URL::setPath(const std::string& aPath)
+void URL::setPath(const std::wstring& aPath)
 {
     m_path = aPath;
 }
 
-std::string URL::query() const
+std::wstring URL::query() const
 {
     return m_query;
 }
 
-void URL::setQuery(const std::string& aQuery)
+void URL::setQuery(const std::wstring& aQuery)
 {
     m_query = aQuery;
 }
 
-std::string URL::fragment() const
+std::wstring URL::fragment() const
 {
     return m_fragment;
 }
 
-void URL::setFragment(const std::string& aFragment)
+void URL::setFragment(const std::wstring& aFragment)
 {
     m_fragment = aFragment;
 }
 
-bool URL::setURL(const std::string& aUrl)
+bool URL::setURL(const std::wstring& aUrl)
 {
     return parseUrl(aUrl);
 }
 
-std::string URL::getURLString()
+std::wstring URL::getURLString()
 {
-    std::string result;
+    std::wstring result;
 
     if(!m_scheme.empty())
     {
         result += m_scheme;
-        result += "://";
+        result += L"://";
     }
 
     if(!m_user.empty())
@@ -628,11 +628,11 @@ std::string URL::getURLString()
 
         if(!m_password.empty())
         {
-            result += ':';
+            result += L':';
             result += m_password;
         }
 
-        result += '@';
+        result += L'@';
     }
 
     if(!m_host.empty())
@@ -641,28 +641,29 @@ std::string URL::getURLString()
 
         if(m_port)
         {
-            result += ':';
+            result += L':';
             char buf[20];
             sprintf(buf, "%d", m_port);
-            result += buf;
+            std::string port(buf);
+            result += std::wstring(port.begin(), port.end());
         }
     }
 
     if(!m_path.empty())
     {
-        result += '/';
+        result += L'/';
         result += m_path;
     }
 
     if(!m_query.empty())
     {
-        result += '?';
+        result += L'?';
         result += m_query;
     }
 
     if(!m_fragment.empty())
     {
-        result += '#';
+        result += L'#';
         result += m_fragment;
     }
 

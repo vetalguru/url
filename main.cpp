@@ -54,29 +54,29 @@ int main()
 
 bool urlSchemeTest()
 {
-    URL url("https://");
-    if(url.scheme() != "https")
+    URL url(L"https://");
+    if(url.scheme() != L"https")
         return false;
 
-    if(url.user() != "")
+    if(url.user() != L"")
         return false;
 
-    if(url.password() != "")
+    if(url.password() != L"")
         return false;
 
-    if(url.host() != "")
+    if(url.host() != L"")
         return false;
 
     if(url.port() != 0)
         return false;
 
-    if(url.path() != "")
+    if(url.path() != L"")
         return false;
 
-    if(url.query() != "")
+    if(url.query() != L"")
         return false;
 
-    if(url.fragment() != "")
+    if(url.fragment() != L"")
         return false;
 
     return true;
@@ -84,29 +84,29 @@ bool urlSchemeTest()
 
 bool urlIPv6Test()
 {
-    URL url("http://[2a00:11d8:1201:0:962b:18:e716:fb97]");
-    if(url.scheme() != "http")
+    URL url(L"http://[2a00:11d8:1201:0:962b:18:e716:fb97]");
+    if(url.scheme() != L"http")
         return false;
 
-    if(url.user() != "")
+    if(url.user() != L"")
         return false;
 
-    if(url.password() != "")
+    if(url.password() != L"")
         return false;
 
-    if(url.host() != "[2a00:11d8:1201:0:962b:18:e716:fb97]")
+    if(url.host() != L"[2a00:11d8:1201:0:962b:18:e716:fb97]")
         return false;
 
     if(url.port() != 0)
         return false;
 
-    if(url.path() != "")
+    if(url.path() != L"")
         return false;
 
-    if(url.query() != "")
+    if(url.query() != L"")
         return false;
 
-    if(url.fragment() != "")
+    if(url.fragment() != L"")
         return false;
 
     return true;
@@ -114,29 +114,29 @@ bool urlIPv6Test()
 
 bool urlIPv6PortTest()
 {
-    URL url("http://[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
-    if(url.scheme() != "http")
+    URL url(L"http://[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
+    if(url.scheme() != L"http")
         return false;
 
-    if(url.user() != "")
+    if(url.user() != L"")
         return false;
 
-    if(url.password() != "")
+    if(url.password() != L"")
         return false;
 
-    if(url.host() != "[2a00:11d8:1201:0:962b:18:e716:fb97]")
+    if(url.host() != L"[2a00:11d8:1201:0:962b:18:e716:fb97]")
         return false;
 
     if(url.port() != 8080)
         return false;
 
-    if(url.path() != "")
+    if(url.path() != L"")
         return false;
 
-    if(url.query() != "")
+    if(url.query() != L"")
         return false;
 
-    if(url.fragment() != "")
+    if(url.fragment() != L"")
         return false;
 
     return true;
@@ -144,29 +144,29 @@ bool urlIPv6PortTest()
 
 bool urlUserIPv6PortTest()
 {
-    URL url("http://user@[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
-    if(url.scheme() != "http")
+    URL url(L"http://user@[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
+    if(url.scheme() != L"http")
         return false;
 
-    if(url.user() != "user")
+    if(url.user() != L"user")
         return false;
 
-    if(url.password() != "")
+    if(url.password() != L"")
         return false;
 
-    if(url.host() != "[2a00:11d8:1201:0:962b:18:e716:fb97]")
+    if(url.host() != L"[2a00:11d8:1201:0:962b:18:e716:fb97]")
         return false;
 
     if(url.port() != 8080)
         return false;
 
-    if(url.path() != "")
+    if(url.path() != L"")
         return false;
 
-    if(url.query() != "")
+    if(url.query() != L"")
         return false;
 
-    if(url.fragment() != "")
+    if(url.fragment() != L"")
         return false;
 
     return true;
@@ -174,29 +174,29 @@ bool urlUserIPv6PortTest()
 
 bool urlUserPasswordIPv6PortTest()
 {
-    URL url("http://user:password@[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
-    if(url.scheme() != "http")
+    URL url(L"http://user:password@[2a00:11d8:1201:0:962b:18:e716:fb97]:8080");
+    if(url.scheme() != L"http")
         return false;
 
-    if(url.user() != "user")
+    if(url.user() != L"user")
         return false;
 
-    if(url.password() != "password")
+    if(url.password() != L"password")
         return false;
 
-    if(url.host() != "[2a00:11d8:1201:0:962b:18:e716:fb97]")
+    if(url.host() != L"[2a00:11d8:1201:0:962b:18:e716:fb97]")
         return false;
 
     if(url.port() != 8080)
         return false;
 
-    if(url.path() != "")
+    if(url.path() != L"")
         return false;
 
-    if(url.query() != "")
+    if(url.query() != L"")
         return false;
 
-    if(url.fragment() != "")
+    if(url.fragment() != L"")
         return false;
 
     return true;
