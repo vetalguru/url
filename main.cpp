@@ -4,6 +4,7 @@
 /**
 
 URL list
+Empty URL
 https://
 http://[2a00:11d8:1201:0:962b:18:e716:fb97]
 http://[2a00:11d8:1201:0:962b:18:e716:fb97]:8080
@@ -12,7 +13,7 @@ http://user:password@[2a00:11d8:1201:0:962b:18:e716:fb97]:8080
 
 */
 
-
+bool urlEmptyTest();
 bool urlSchemeTest();
 bool urlIPv6Test();
 bool urlIPv6PortTest();
@@ -22,6 +23,11 @@ bool urlUserPasswordIPv6PortTest();
 int main()
 {
     std::cout << "START TESTS" << std::endl;
+
+    if(urlEmptyTest())
+        std::cout << "urlEmptyTest \tOK" << std::endl;
+    else
+        std::cout << "urlEmptyTest \tFAILED" << std::endl;
 
     if(urlSchemeTest())
         std::cout << "urlSchemeTest \tOK" << std::endl;
@@ -50,6 +56,39 @@ int main()
 
     std::cout << "FINISH TESTS" << std::endl;
     return 0;
+}
+
+
+//===================================================================
+
+bool urlEmptyTest()
+{
+    URL url;
+    if(url.scheme() != L"")
+        return false;
+
+    if(url.user() != L"")
+        return false;
+
+    if(url.password() != L"")
+        return false;
+
+    if(url.host() != L"")
+        return false;
+
+    if(url.port() != 0)
+        return false;
+
+    if(url.path() != L"")
+        return false;
+
+    if(url.query() != L"")
+        return false;
+
+    if(url.fragment() != L"")
+        return false;
+
+    return true;
 }
 
 bool urlSchemeTest()
